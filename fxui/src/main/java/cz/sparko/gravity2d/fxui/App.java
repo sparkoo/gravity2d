@@ -42,7 +42,7 @@ public class App extends Application {
     private void mainLoop() {
         this.field = new Field(WIDTH, HEIGHT);
         Random r = new Random();
-        IntStream.range(0, 500).forEach(i -> field.addBody(new Body(r.nextInt(WIDTH), r.nextInt(HEIGHT), r.nextInt(10), r.nextInt(10), 100)));
+        IntStream.range(0, 20).forEach(i -> field.addBody(new Body(r.nextInt(WIDTH), r.nextInt(HEIGHT), r.nextInt(10), r.nextInt(10), 100)));
 
         new Thread(() -> {
             while(true) {
