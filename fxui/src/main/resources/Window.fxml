@@ -4,7 +4,9 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-    fx:controller="cz.sparko.gravity2d.fxui.WindowController" prefHeight="400.0" prefWidth="600.0"
-    stylesheets="@Window.css" fx:id="content">
-    <Canvas fx:id="canvas" styleClass="canvas" />
+            fx:controller="cz.sparko.gravity2d.fxui.WindowController" prefHeight="400.0" prefWidth="600.0"
+            stylesheets="@Window.css" fx:id="content">
+    <center>
+        <Canvas fx:id="canvas" styleClass="canvas"/>
+    </center>
 </BorderPane>

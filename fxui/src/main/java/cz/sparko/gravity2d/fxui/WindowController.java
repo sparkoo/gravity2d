@@ -9,14 +9,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
 public class WindowController implements Initializable {
 
     static final int SPEED_DIVIDER = 100;
-    static final int SIZE_DIVIDER = 10;
-
+    private static final int SIZE_DIVIDER = 10;
 
     @FXML
     public Canvas canvas;
@@ -28,7 +28,7 @@ public class WindowController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         canvasContext = canvas.getGraphicsContext2D();
-        canvasContext.setFill(Color.ORANGERED);
+        canvasContext.setFill(Color.YELLOW);
         canvasContext.fillRect(10, 10, 10, 10);
     }
 
