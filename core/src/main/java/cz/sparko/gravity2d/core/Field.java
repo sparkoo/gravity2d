@@ -7,17 +7,12 @@ import java.util.stream.Collectors;
 public class Field {
     private List<Body> bodies = new ArrayList<>();
 
-    private final int width;
-    private final int height;
-
-    public Field(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public Field() {
     }
 
     public void nextIteration() {
         this.bodies = this.bodies.stream()
-                .map(b -> b.move(this.bodies, this.width, this.height))
+                .map(b -> b.move(this.bodies))
                 .collect(Collectors.toList());
     }
 

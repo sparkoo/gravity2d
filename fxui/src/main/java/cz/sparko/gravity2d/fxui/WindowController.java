@@ -14,7 +14,9 @@ import javafx.scene.paint.Color;
 
 public class WindowController implements Initializable {
 
-    public static final int SPEED_DIVIDER = 10;
+    static final int SPEED_DIVIDER = 100;
+    static final int SIZE_DIVIDER = 10;
+
 
     @FXML
     public Canvas canvas;
@@ -38,6 +40,7 @@ public class WindowController implements Initializable {
         this.clearCanvas();
         bodies.forEach(body -> canvasContext.fillOval(
                 body.getPosition().getX() / SPEED_DIVIDER,
-                body.getPosition().getY() / SPEED_DIVIDER, 5, 5));
+                body.getPosition().getY() / SPEED_DIVIDER,
+                body.getMass() / SIZE_DIVIDER, body.getMass() / SIZE_DIVIDER));
     }
 }

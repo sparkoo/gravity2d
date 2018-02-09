@@ -12,40 +12,38 @@ import cz.sparko.gravity2d.util.Vector2d;
 public class Body {
     private static final Logger LOG = LoggerFactory.getLogger(Body.class);
 
+
+    private static final double G = 6.674 * (10 ^ -11);
+
     private final Point position;
 
     private final Vector2d velocity;
 
-    private final int mass;
+    private final double mass;
 
-    public Body(Point position, Vector2d velocity, int mass) {
+    public Body(Point position, Vector2d velocity, double mass) {
         this.position = position;
         this.velocity = velocity;
         this.mass = mass;
     }
 
-    public Body move(List<Body> bodies, int maxX, int maxY) {
-        //        if (position.getX() <= 0 || position.getX() >= maxX) {
-        //            this.velocity = this.velocity.reverseX();
-        //        }
-        //        if (this.position.getY() <= 0 || this.position.getY() >= maxY) {
-        //            this.velocity = this.velocity.reverseY();
-        //        }
-        //
-        //        position = position.move(this.velocity);
-        double G = 6.674 * (10 ^ -11);
-        Vector2d force = bodies.stream().map(b -> {
-            double forceScalar = G * (this.mass * b.mass) / position.distance(b.position);
-            Vector2d direction = position.direction(b.position);
-            Vector2d unitDirection = direction.unit();
-            return unitDirection.multiply(forceScalar);
-        }).reduce(Vector2d::add)
+    public Body move(List<Body> bodies) {
+        Vector2d force = bodies.stream()
+                .filter(b -> !b.equals(this))
+                .map(this::calculateGForce)
+                .reduce(Vector2d::add)
+                .map(f -> f.divide(mass))   //inertia
                 .orElseThrow(() -> new RuntimeException("unable to calculate the Force"));
 
-        LOG.info("force by bodies [{}]", force);
-        Vector2d finalVelocity = velocity.add(force);
-        LOG.info("final velocity [{}]", finalVelocity);
+        Vector2d finalVelocity = velocity.subtract(force);
         return new Body(position.move(finalVelocity), finalVelocity, mass);
+    }
+
+    private Vector2d calculateGForce(Body b) {
+        double forceScalar = G * ((mass * b.mass) / position.distance(b.position));
+        Vector2d direction = position.direction(b.position);
+        Vector2d unitDirection = direction.unit();
+        return unitDirection.multiply(forceScalar);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class Body {
         return velocity;
     }
 
-    public int getMass() {
+    public double getMass() {
         return mass;
     }
 }

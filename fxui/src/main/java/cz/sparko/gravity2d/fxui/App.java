@@ -42,11 +42,11 @@ public class App extends Application {
     }
 
     private void mainLoop() {
-        this.field = new Field(WIDTH, HEIGHT);
+        this.field = new Field();
         Random r = new Random();
-        IntStream.range(0, 20).forEach(i -> field.addBody(
-                new Body(new Point(r.nextInt(WIDTH), r.nextInt(HEIGHT)),
-                new Vector2d(r.nextInt(10), r.nextInt(10)), 100)));
+        IntStream.range(0, 5).forEach(i -> field.addBody(
+                new Body(new Point(r.nextInt(WIDTH) * WindowController.SPEED_DIVIDER, r.nextInt(HEIGHT) * WindowController.SPEED_DIVIDER),
+                new Vector2d(r.nextInt(10), r.nextInt(10)), r.nextInt(1000))));
 
         new Thread(() -> {
             while(true) {
