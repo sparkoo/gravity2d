@@ -1,43 +1,40 @@
 package cz.sparko.gravity2d.core;
 
+import java.util.List;
 import java.util.Objects;
 
+import cz.sparko.gravity2d.util.Point;
+import cz.sparko.gravity2d.util.Vector2d;
+
 public class Body {
-    private int x;
-    private int y;
+    private Point position;
 
-    private int vx;
-    private int vy;
+    private Vector2d velocity;
 
-    private int mass;
+    private final int mass;
 
-    public Body(int x, int y, int vx, int vy, int mass) {
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
+    public Body(Point position, Vector2d velocity, int mass) {
+        this.position = position;
+        this.velocity = velocity;
         this.mass = mass;
     }
 
-    public void move(int maxX, int maxY) {
-        if (x <= 0 || x >= maxX) {
-            vx *= -1;
+    public void move(List<Body> bodies, int maxX, int maxY) {
+        if (position.getX() <= 0 || position.getX() >= maxX) {
+//            this.velocity = this.velocity.reverseX();
         }
-        x += vx;
+        if (this.position.getY() <= 0 || this.position.getY() >= maxY) {
+//            this.velocity = this.velocity.reverseY();
+        }
 
-        if (y <= 0 || y >= maxY) {
-            vy *= -1;
-        }
-        y += vy;
+        position = position.move(this.velocity);
     }
 
     @Override
     public String toString() {
         return "Body{" +
-                "x=" + x +
-                ", y=" + y +
-                ", vx=" + vx +
-                ", vy=" + vy +
+                "position=" + position +
+                ", velocity=" + velocity +
                 ", mass=" + mass +
                 '}';
     }
@@ -47,33 +44,23 @@ public class Body {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
         Body body = (Body) o;
-        return x == body.x &&
-                y == body.y &&
-                vx == body.vx &&
-                vy == body.vy &&
-                mass == body.mass;
+        return mass == body.mass &&
+                Objects.equals(position, body.position) &&
+                Objects.equals(velocity, body.velocity);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(x, y, vx, vy, mass);
+        return Objects.hash(position, velocity, mass);
     }
 
-    public int getX() {
-        return x;
+    public Point getPosition() {
+        return position;
     }
 
-    public int getY() {
-        return y;
-    }
-
-    public int getVx() {
-        return vx;
-    }
-
-    public int getVy() {
-        return vy;
+    public Vector2d getVelocity() {
+        return velocity;
     }
 
     public int getMass() {

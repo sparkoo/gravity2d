@@ -15,7 +15,7 @@ public class Field {
     }
 
     public void nextIteration() {
-        this.bodies.forEach(b -> b.move(this.width, this.height));
+        this.bodies.forEach(b -> b.move(this.bodies, this.width, this.height));
     }
 
     public void addBody(Body body) {
