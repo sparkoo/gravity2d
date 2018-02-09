@@ -13,6 +13,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
 public class WindowController implements Initializable {
+
+    public static final int SPEED_DIVIDER = 10;
+
     @FXML
     public Canvas canvas;
     @FXML
@@ -33,6 +36,8 @@ public class WindowController implements Initializable {
 
     void drawBodies(List<Body> bodies) {
         this.clearCanvas();
-        bodies.forEach(body -> canvasContext.fillOval(body.getPosition().getX(), body.getPosition().getY(), 5, 5));
+        bodies.forEach(body -> canvasContext.fillOval(
+                body.getPosition().getX() / SPEED_DIVIDER,
+                body.getPosition().getY() / SPEED_DIVIDER, 5, 5));
     }
 }

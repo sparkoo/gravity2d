@@ -2,6 +2,9 @@ package cz.sparko.gravity2d.util;
 
 import java.util.Objects;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Point {
     private final double x;
     private final double y;
@@ -13,6 +16,18 @@ public class Point {
 
     public Point move(Vector2d velocity) {
         return new Point(x + velocity.getX(), y + velocity.getY());
+    }
+
+    //  _      __________________________
+    //   \    /          2             2
+    //    \  /  (Xa - Xb)  +  (Ya - Yb)
+    //     \/
+    public double distance(Point p2) {
+        return sqrt(pow((x - p2.getX()), 2) + pow((y - p2.getY()), 2));
+    }
+
+    public Vector2d direction(Point p2) {
+        return new Vector2d(p2.getX() - x, p2.getY() - y);
     }
 
     @Override

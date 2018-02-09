@@ -2,9 +2,10 @@ package cz.sparko.gravity2d.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Field {
-    private final List<Body> bodies = new ArrayList<>();
+    private List<Body> bodies = new ArrayList<>();
 
     private final int width;
     private final int height;
@@ -15,7 +16,9 @@ public class Field {
     }
 
     public void nextIteration() {
-        this.bodies.forEach(b -> b.move(this.bodies, this.width, this.height));
+        this.bodies = this.bodies.stream()
+                .map(b -> b.move(this.bodies, this.width, this.height))
+                .collect(Collectors.toList());
     }
 
     public void addBody(Body body) {
