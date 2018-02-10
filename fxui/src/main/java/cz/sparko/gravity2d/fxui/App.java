@@ -17,7 +17,9 @@ import javafx.beans.value.ObservableValueBase;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,20 +66,25 @@ public class App extends Application {
 
     private void mainLoop() {
         this.field = new Field();
-        IntStream.range(0, 5).forEach(i -> field.addBody(
-                new Body(new Point(r.nextInt(WIDTH) * SPEED_DIVIDER, r.nextInt(HEIGHT) * SPEED_DIVIDER),
-                        randomSpeed(50), r.nextInt(100))));
+        IntStream.range(0, 100).forEach(i -> field.addBody(
+                new Body(new Point(r.nextInt(WIDTH) * SPEED_DIVIDER, r.nextInt(HEIGHT) *
+                        SPEED_DIVIDER),
+                        new Vector2d(0, 0), r.nextInt(100) + 1)));
 
-                field.addBody(new Body(new Point(WIDTH / 2 * SPEED_DIVIDER, HEIGHT / 2 * SPEED_DIVIDER),
-                        new Vector2d(0, 0), 10000));
+//        field.addBody(new Body(new Point(WIDTH / 2 * SPEED_DIVIDER, HEIGHT / 2
+//                * SPEED_DIVIDER),
+//                new Vector2d(0, 0), 1_000, Color.BLACK));
         //
-        //        field.addBody(new Body(new Point((WIDTH / 2 + 50) * SPEED_DIVIDER, HEIGHT / 2 * SPEED_DIVIDER),
+        //        field.addBody(new Body(new Point((WIDTH / 2 + 50) * SPEED_DIVIDER, HEIGHT / 2 *
+        // SPEED_DIVIDER),
         //                new Vector2d(0, 150), 10));
         //
-        //        field.addBody(new Body(new Point((WIDTH / 2 + 100) * SPEED_DIVIDER, HEIGHT / 2 * SPEED_DIVIDER),
+        //        field.addBody(new Body(new Point((WIDTH / 2 + 100) * SPEED_DIVIDER, HEIGHT / 2
+        // * SPEED_DIVIDER),
         //                new Vector2d(0, 125), 10));
         //
-        //        field.addBody(new Body(new Point((WIDTH / 2 + 200) * SPEED_DIVIDER, HEIGHT / 2 * SPEED_DIVIDER),
+        //        field.addBody(new Body(new Point((WIDTH / 2 + 200) * SPEED_DIVIDER, HEIGHT / 2
+        // * SPEED_DIVIDER),
         //                new Vector2d(0, 100), 10));
 
         new Thread(() -> {

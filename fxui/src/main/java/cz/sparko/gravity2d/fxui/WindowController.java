@@ -2,6 +2,7 @@ package cz.sparko.gravity2d.fxui;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import cz.sparko.gravity2d.core.Body;
@@ -38,13 +39,16 @@ public class WindowController implements Initializable {
 
     void drawBodies(List<Body> bodies) {
         this.clearCanvas();
+        Random r = new Random();
         bodies.forEach(body -> {
             double size = body.getMass() / SIZE_DIVIDER;
             double halfSize = size / 2;
+
+            canvasContext.setFill(body.getColor());
             canvasContext.fillOval(
-                    (body.getPosition().getX() / SPEED_DIVIDER) - halfSize,
-                    (body.getPosition().getY() / SPEED_DIVIDER) - halfSize,
-                    size, size);
+                    (body.getPosition().getX() / SPEED_DIVIDER) - 2.5,
+                    (body.getPosition().getY() / SPEED_DIVIDER) - 2.5,
+                    5, 5);
         });
     }
 }
