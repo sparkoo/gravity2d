@@ -30,6 +30,9 @@ public class Body {
     private final Color color;
 
     private Body(long id, Point position, Vector2d velocity, double mass, Color color) {
+        if (mass <= 0) {
+            throw new IllegalArgumentException("mass must be > 0");
+        }
         this.id = id;
         this.position = position;
         this.velocity = velocity;

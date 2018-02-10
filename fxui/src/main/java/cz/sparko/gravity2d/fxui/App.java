@@ -66,14 +66,22 @@ public class App extends Application {
 
     private void mainLoop() {
         this.field = new Field();
-        IntStream.range(0, 100).forEach(i -> field.addBody(
-                new Body(new Point(r.nextInt(WIDTH) * SPEED_DIVIDER, r.nextInt(HEIGHT) *
-                        SPEED_DIVIDER),
-                        new Vector2d(0, 0), r.nextInt(100) + 1)));
-
-//        field.addBody(new Body(new Point(WIDTH / 2 * SPEED_DIVIDER, HEIGHT / 2
-//                * SPEED_DIVIDER),
-//                new Vector2d(0, 0), 1_000, Color.BLACK));
+//        IntStream.range(0, 10).forEach(i -> field.addBody(
+//                new Body(new Point(r.nextInt(WIDTH) * SPEED_DIVIDER, r.nextInt(HEIGHT) *
+//                        SPEED_DIVIDER),
+//                        new Vector2d(0, 0), r.nextDouble() * 10)));
+        field.addBody(new Body(new Point((WIDTH / 2 * SPEED_DIVIDER) + 30000000, HEIGHT / 2
+                * SPEED_DIVIDER),
+                new Vector2d(0, 70000), 5972, Color.DEEPSKYBLUE));
+        field.addBody(new Body(new Point((WIDTH / 2 * SPEED_DIVIDER) + 29500000, HEIGHT / 2
+                * SPEED_DIVIDER),
+                new Vector2d(0, 70000), 7.48, Color.DARKGRAY));
+        field.addBody(new Body(new Point((WIDTH / 2 * SPEED_DIVIDER) + 40000000, HEIGHT / 2
+                * SPEED_DIVIDER),
+                new Vector2d(0, 80000), 641.7, Color.INDIANRED));
+        field.addBody(new Body(new Point(WIDTH / 2 * SPEED_DIVIDER, HEIGHT / 2
+                * SPEED_DIVIDER),
+                new Vector2d(0, 0), 1989000000, Color.YELLOW));
         //
         //        field.addBody(new Body(new Point((WIDTH / 2 + 50) * SPEED_DIVIDER, HEIGHT / 2 *
         // SPEED_DIVIDER),
@@ -90,8 +98,12 @@ public class App extends Application {
         new Thread(() -> {
             LOG.info("so, what we have here ???");
             field.getBodies().forEach(b -> LOG.info("[{}]", b));
+            double maxMass = field.getBodies().stream()
+                    .map(Body::getMass)
+                    .max((a, b) -> a - b > 0 ? 1 : -1)
+                    .get();
             while (true) {
-                this.windowController.drawBodies(this.field.getBodies());
+                this.windowController.drawBodies(this.field.getBodies(), maxMass);
                 this.field.nextIteration();
                 try {
                     Thread.sleep(10);
