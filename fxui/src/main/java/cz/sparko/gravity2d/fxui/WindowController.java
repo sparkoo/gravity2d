@@ -38,9 +38,13 @@ public class WindowController implements Initializable {
 
     void drawBodies(List<Body> bodies) {
         this.clearCanvas();
-        bodies.forEach(body -> canvasContext.fillOval(
-                body.getPosition().getX() / SPEED_DIVIDER,
-                body.getPosition().getY() / SPEED_DIVIDER,
-                body.getMass() / SIZE_DIVIDER, body.getMass() / SIZE_DIVIDER));
+        bodies.forEach(body -> {
+            double size = body.getMass() / SIZE_DIVIDER;
+            double halfSize = size / 2;
+            canvasContext.fillOval(
+                    (body.getPosition().getX() / SPEED_DIVIDER) - halfSize,
+                    (body.getPosition().getY() / SPEED_DIVIDER) - halfSize,
+                    size, size);
+        });
     }
 }
