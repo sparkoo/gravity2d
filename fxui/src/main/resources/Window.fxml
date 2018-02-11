@@ -4,9 +4,14 @@
 
 <?import javafx.scene.canvas.Canvas?>
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="cz.sparko.gravity2d.fxui.WindowController" prefHeight="400.0" prefWidth="600.0"
-            stylesheets="@Window.css" fx:id="content">
-    <center>
-        <Canvas fx:id="canvas" styleClass="canvas"/>
-    </center>
+    fx:controller="cz.sparko.gravity2d.fxui.WindowController"
+    stylesheets="@Window.css" fx:id="content">
+    <top>
+        <Canvas fx:id="canvas" styleClass="canvas" />
+    </top>
+    <bottom>
+        <FlowPane fx:id="controlPanel" prefHeight="50">
+            <Button fx:id="startStopButton" text="start/stop" onAction="#onStartStop"/>
+        </FlowPane>
+    </bottom>
 </BorderPane>

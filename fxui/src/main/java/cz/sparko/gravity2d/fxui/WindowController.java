@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
+import java.util.EventListener;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import cz.sparko.gravity2d.core.Body;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -27,6 +30,8 @@ public class WindowController implements Initializable {
     @FXML
     public BorderPane content;
 
+    private Runnable startListener;
+
     private GraphicsContext canvasContext;
 
     @Override
@@ -44,7 +49,7 @@ public class WindowController implements Initializable {
         this.clearCanvas();
         double sizeCoefficient = maxMass / MAX_SIZE;
         bodies.forEach(body -> {
-            LOG.trace("[{}]",body);
+            LOG.trace("[{}]", body);
             double size = body.getMass() / sizeCoefficient;
             if (size < MIN_SIZE) {
                 size = MIN_SIZE;
@@ -57,5 +62,17 @@ public class WindowController implements Initializable {
                     (body.getPosition().getY() / SPEED_DIVIDER) - halfSize,
                     size, size);
         });
+    }
+
+    public void listenStartSwitch(Runnable listener) {
+        this.startListener = listener;
+    }
+
+    public void onStartStop(ActionEvent actionEvent) {
+        LOG.info("start/stop button pressed [{}]", actionEvent);
+
+        if (startListener != null) {
+            startListener.run();
+        }
     }
 }

@@ -1,27 +1,24 @@
 package cz.sparko.gravity2d.fxui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 import cz.sparko.gravity2d.core.Body;
 import cz.sparko.gravity2d.core.Field;
 import cz.sparko.gravity2d.util.Point;
 import cz.sparko.gravity2d.util.Vector2d;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
-import javafx.beans.value.ObservableValueBase;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static cz.sparko.gravity2d.fxui.WindowController.SPEED_DIVIDER;
 
@@ -32,6 +29,8 @@ public class App extends Application {
     private static final int HEIGHT = 800;
 
     private final Random r = new Random();
+
+    private boolean running = true;
 
     private Field field;
 
@@ -47,12 +46,16 @@ public class App extends Application {
         Parent root = loader.load();
         windowController = loader.getController();
 
+        windowController.content.heightProperty().addListener((observable, oldValue, newValue) -> {
+            windowController.canvas.heightProperty().setValue(newValue.doubleValue() - 50);
+        });
         windowController.canvas.widthProperty().bind(windowController.content.widthProperty());
-        windowController.canvas.heightProperty().bind(windowController.content.heightProperty());
 
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
         primaryStage.show();
+
+        windowController.listenStartSwitch(() -> this.running = !this.running);
         mainLoop();
     }
 
@@ -66,10 +69,10 @@ public class App extends Application {
 
     private void mainLoop() {
         this.field = new Field();
-//        IntStream.range(0, 10).forEach(i -> field.addBody(
-//                new Body(new Point(r.nextInt(WIDTH) * SPEED_DIVIDER, r.nextInt(HEIGHT) *
-//                        SPEED_DIVIDER),
-//                        new Vector2d(0, 0), r.nextDouble() * 10)));
+        //        IntStream.range(0, 10).forEach(i -> field.addBody(
+        //                new Body(new Point(r.nextInt(WIDTH) * SPEED_DIVIDER, r.nextInt(HEIGHT) *
+        //                        SPEED_DIVIDER),
+        //                        new Vector2d(0, 0), r.nextDouble() * 10)));
         field.addBody(new Body(new Point((WIDTH / 2 * SPEED_DIVIDER) + 30000000, HEIGHT / 2
                 * SPEED_DIVIDER),
                 new Vector2d(0, 70000), 5972, Color.DEEPSKYBLUE));
@@ -103,8 +106,10 @@ public class App extends Application {
                     .max((a, b) -> a - b > 0 ? 1 : -1)
                     .get();
             while (true) {
-                this.windowController.drawBodies(this.field.getBodies(), maxMass);
-                this.field.nextIteration();
+                if (running) {
+                    this.windowController.drawBodies(this.field.getBodies(), maxMass);
+                    this.field.nextIteration();
+                }
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
