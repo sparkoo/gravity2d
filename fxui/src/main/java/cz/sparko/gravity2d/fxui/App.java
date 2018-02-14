@@ -5,28 +5,27 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import cz.sparko.gravity2d.core.Body;
 import cz.sparko.gravity2d.core.Field;
 import cz.sparko.gravity2d.util.Point;
 import cz.sparko.gravity2d.util.Vector2d;
 import javafx.application.Application;
-import javafx.beans.property.ReadOnlyDoubleWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import static cz.sparko.gravity2d.fxui.WindowController.SPEED_DIVIDER;
-
 public class App extends Application {
     private static final Logger LOG = LoggerFactory.getLogger(App.class);
 
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 800;
+    static final int WIDTH = 800;
+    static final int HEIGHT = 800;
 
     private final Random r = new Random();
 
@@ -68,35 +67,13 @@ public class App extends Application {
     }
 
     private void mainLoop() {
-        this.field = new Field();
-        //        IntStream.range(0, 10).forEach(i -> field.addBody(
-        //                new Body(new Point(r.nextInt(WIDTH) * SPEED_DIVIDER, r.nextInt(HEIGHT) *
-        //                        SPEED_DIVIDER),
-        //                        new Vector2d(0, 0), r.nextDouble() * 10)));
-        field.addBody(new Body(new Point((WIDTH / 2 * SPEED_DIVIDER) + 30000000, HEIGHT / 2
-                * SPEED_DIVIDER),
-                new Vector2d(0, 70000), 5972, Color.DEEPSKYBLUE));
-        field.addBody(new Body(new Point((WIDTH / 2 * SPEED_DIVIDER) + 29500000, HEIGHT / 2
-                * SPEED_DIVIDER),
-                new Vector2d(0, 70000), 7.48, Color.DARKGRAY));
-        field.addBody(new Body(new Point((WIDTH / 2 * SPEED_DIVIDER) + 40000000, HEIGHT / 2
-                * SPEED_DIVIDER),
-                new Vector2d(0, 80000), 641.7, Color.INDIANRED));
-        field.addBody(new Body(new Point(WIDTH / 2 * SPEED_DIVIDER, HEIGHT / 2
-                * SPEED_DIVIDER),
-                new Vector2d(0, 0), 1989000000, Color.YELLOW));
-        //
-        //        field.addBody(new Body(new Point((WIDTH / 2 + 50) * SPEED_DIVIDER, HEIGHT / 2 *
-        // SPEED_DIVIDER),
-        //                new Vector2d(0, 150), 10));
-        //
-        //        field.addBody(new Body(new Point((WIDTH / 2 + 100) * SPEED_DIVIDER, HEIGHT / 2
-        // * SPEED_DIVIDER),
-        //                new Vector2d(0, 125), 10));
-        //
-        //        field.addBody(new Body(new Point((WIDTH / 2 + 200) * SPEED_DIVIDER, HEIGHT / 2
-        // * SPEED_DIVIDER),
-        //                new Vector2d(0, 100), 10));
+        field = new Field();
+        field.addBody(new Body(new Point(0, 0),
+                new Vector2d(0, 0), 100000, Color.DEEPSKYBLUE));
+        field.addBody(new Body(new Point(300, 0),
+                new Vector2d(0, -5), 1, Color.DARKGRAY));
+        IntStream.range(0, 100).forEach(i -> field.addBody(new Body(new Point(r.nextInt(600) - 300, r
+                .nextInt(600) - 300), new Vector2d(0, 0), 1)));
 
         new Thread(() -> {
             LOG.info("so, what we have here ???");
@@ -105,10 +82,21 @@ public class App extends Application {
                     .map(Body::getMass)
                     .max((a, b) -> a - b > 0 ? 1 : -1)
                     .get();
+
+            AtomicInteger fpsCounter = new AtomicInteger(0);
+            new Timer().scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    int fps = fpsCounter.getAndSet(0);
+                    LOG.info("[{}] FPS", fps);
+                }
+            }, 0, 1000);
+
             while (true) {
                 if (running) {
                     this.windowController.drawBodies(this.field.getBodies(), maxMass);
                     this.field.nextIteration();
+                    int fps = fpsCounter.incrementAndGet();
                 }
                 try {
                     Thread.sleep(10);

@@ -4,10 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.EventListener;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import cz.sparko.gravity2d.core.Body;
 import javafx.event.ActionEvent;
@@ -21,7 +19,7 @@ import javafx.scene.paint.Color;
 public class WindowController implements Initializable {
     private static final Logger LOG = LoggerFactory.getLogger(WindowController.class);
 
-    static final int SPEED_DIVIDER = 100000;
+    static final int SPEED_DIVIDER = 10000;
     private static final double MAX_SIZE = 50;
     private static final double MIN_SIZE = 3;
 
@@ -58,8 +56,8 @@ public class WindowController implements Initializable {
 
             canvasContext.setFill(body.getColor());
             canvasContext.fillOval(
-                    (body.getPosition().getX() / SPEED_DIVIDER) - halfSize,
-                    (body.getPosition().getY() / SPEED_DIVIDER) - halfSize,
+                    (body.getPosition().getX() / SPEED_DIVIDER) - halfSize + (App.WIDTH / 2),
+                    (body.getPosition().getY() / SPEED_DIVIDER) - halfSize + (App.WIDTH / 2),
                     size, size);
         });
     }
